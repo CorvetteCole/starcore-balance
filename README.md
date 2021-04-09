@@ -1,2 +1,2 @@
-# starcore-balance
-Code used to generate new Space Engineers Starcore Test Tournament Balance Site instances
+# Starcore Balance Server Code
+Code used to generate new JSON files for the client
