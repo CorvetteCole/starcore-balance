@@ -1,2 +1,1 @@
-# Starcore Balance Server Code
-Code used to generate new JSON files for the client
+Make sure to run ```pub run build_runner build``` after changing any serializable classes
