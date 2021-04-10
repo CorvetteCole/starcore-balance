@@ -1,25 +1,29 @@
+import 'dart:io';
 import 'package:logging/logging.dart';
 import 'package:xml/xml.dart';
+
 import 'models/World.dart';
 import 'Steam.dart';
-import 'dart:io';
+import 'ModManager.dart';
+
 
 class MapManager {
   final _log = Logger('MapManager');
-  late final gameID;
-  late final subDirectory;
-  late final configName;
+  final gameId;
+  final subDirectory;
+  final _configName = 'Sandbox_config.sbc';
+  final Duration updateInterval;
+  late final ModManager _modManager;
 
-  late Duration updateInterval;
   Map<int, String?> _tournamentMaps = {};
   Map<int, World> _tournamentWorlds = {};
   var _lastMapUpdate = DateTime.fromMillisecondsSinceEpoch(0);
 
-  MapManager(this.gameID,
+  MapManager(this.gameId,
       {this.subDirectory = '/steamcmd/',
-      this.configName = 'Sandbox_config.sbc',
       this.updateInterval = const Duration(days: 1),
       List<int>? tournamentMaps}) {
+    _modManager = ModManager(gameId, subDirectory);
     if (tournamentMaps != null) {
       for (var mapID in tournamentMaps) {
         _tournamentMaps[mapID] = null;
@@ -27,29 +31,19 @@ class MapManager {
     }
   }
 
+  // TODO maybe get rid of the check and just call this updateMaps?
+  // the plan is to run this on a callback for like 24 hours anyways, so it
+  // shouldn't matter
+
   // return true on a map getting updated, false otherwise.
   Future<bool> checkForUpdates({bool force = false}) async {
     if (_needsUpdate() || force) {
       await _downloadTournamentMaps();
       await _parseTournamentMaps();
+      await _modManager.updateMods(_tournamentWorlds.values);
       return true;
     }
     return false;
-  }
-
-  // TODO temp for testing, remove this
-  Future<void> downloadMods() async {
-    _log.info('Downloading mods (this might take a little while)');
-    for (var world in _tournamentWorlds.values){
-      _log.fine('Downloading mods for world: ${world.sessionName}');
-      var modIds = <int>[];
-      for (var mod in world.mods){
-        modIds.add(mod.publishedFileId);
-      }
-      await downloadWorkshopItems(gameID, modIds, directory: subDirectory);
-      _log.finer('Finished downloading mods for world: ${world.sessionName}');
-    }
-    _log.info('Finished downloading mods for all worlds');
   }
 
   bool _needsUpdate() {
@@ -62,8 +56,8 @@ class MapManager {
       _log.info('Downloading map $mapID');
       // set directory of map to returned directory
       var returnedDirectory =
-          await downloadWorkshopItem(gameID, mapID, directory: subDirectory);
-      var mapFile = File('$returnedDirectory/$configName');
+          await downloadWorkshopItem(gameId, mapID, directory: subDirectory);
+      var mapFile = File('$returnedDirectory/$_configName');
       if (await mapFile.exists()) {
         _tournamentMaps[mapID] = returnedDirectory;
       } else {
@@ -74,9 +68,9 @@ class MapManager {
   }
 
   Future<void> _parseTournamentMaps() async {
-    for (var mapId in _tournamentMaps.keys){
+    for (var mapId in _tournamentMaps.keys) {
       if (_tournamentMaps[mapId] != null) {
-        var mapFile = File('${_tournamentMaps[mapId]}/$configName');
+        var mapFile = File('${_tournamentMaps[mapId]}/$_configName');
         if (await mapFile.exists()) {
           _log.info('Parsing world for $mapId');
           final parsedFile = XmlDocument.parse(await mapFile.readAsString());
@@ -87,14 +81,14 @@ class MapManager {
             world.mapId = mapId;
             _tournamentWorlds[mapId] = world;
           } else {
-            _log.warning('XML file did not contain world configuration data! skipping..');
+            _log.warning(
+                'XML file did not contain world configuration data! skipping..');
           }
         } else {
-          _log.severe('Config file for $mapId at ${mapFile.path} does not exist!');
+          _log.severe(
+              'Config file for $mapId at ${mapFile.path} does not exist!');
         }
-      } else {
-
-      }
+      } else {}
     }
   }
 
@@ -105,5 +99,4 @@ class MapManager {
   Iterable<World> get tournamentWorlds {
     return _tournamentWorlds.values;
   }
-
 }
