@@ -13,26 +13,25 @@ class ModManager {
 
 
   Future<void> updateMods(var worlds) async {
-    await _downloadModData(worlds);
-    await _parseModData();
+    await _downloadMods(worlds);
+    await _parseMods();
   }
 
-  Future<void> _downloadModData(var worlds) async {
+  Future<void> _downloadMods(var worlds) async {
     _log.info('Downloading mods (this might take a little while)');
     for (var world in worlds){
-      _log.fine('Downloading mods for world: ${world.sessionName}');
+      _log.info('Downloading mods for world: ${world.sessionName}');
       var modIds = <int>[];
       for (var mod in world.mods){
         modIds.add(mod.publishedFileId);
       }
       await downloadWorkshopItems(gameId, modIds, directory: subDirectory);
-      _log.finer('Finished downloading mods for world: ${world.sessionName}');
     }
     _log.info('Finished downloading mods');
   }
 
   // TODO
-  Future<void> _parseModData() async {
+  Future<void> _parseMods() async {
 
   }
 
