@@ -8,7 +8,6 @@ import 'weaponcore/Targeting.dart';
 part 'Weapon.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@JsonSerializable()
 class Weapon {
 
   late Ammo ammo;
