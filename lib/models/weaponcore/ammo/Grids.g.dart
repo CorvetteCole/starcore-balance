@@ -8,8 +8,8 @@ part of 'Grids.dart';
 
 Grids _$GridsFromJson(Map<String, dynamic> json) {
   return Grids(
-    (json['large'] as num).toDouble(),
-    (json['small'] as num).toDouble(),
+    (json['large'] as num?)?.toDouble(),
+    (json['small'] as num?)?.toDouble(),
   );
 }
 

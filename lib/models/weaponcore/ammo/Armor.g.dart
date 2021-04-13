@@ -8,10 +8,10 @@ part of 'Armor.dart';
 
 Armor _$ArmorFromJson(Map<String, dynamic> json) {
   return Armor(
-    (json['armor'] as num).toDouble(),
-    (json['light'] as num).toDouble(),
-    (json['heavy'] as num).toDouble(),
-    (json['nonArmor'] as num).toDouble(),
+    (json['armor'] as num?)?.toDouble(),
+    (json['light'] as num?)?.toDouble(),
+    (json['heavy'] as num?)?.toDouble(),
+    (json['nonArmor'] as num?)?.toDouble(),
   );
 }
 

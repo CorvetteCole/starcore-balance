@@ -17,12 +17,12 @@ Loading _$LoadingFromJson(Map<String, dynamic> json) {
     json['maxHeat'] as int,
     (json['cooldown'] as num).toDouble(),
     json['heatSinkRate'] as int,
-    json['degradeRof'] as bool,
-    json['shotsInBurst'] as int,
-    json['delayAfterBurst'] as int,
-    json['fireFullBurst'] as bool,
-    json['giveUpAfterBurst'] as bool,
-    json['barrelSpinRate'] as int,
+    json['degradeRof'] as bool?,
+    json['shotsInBurst'] as int?,
+    json['delayAfterBurst'] as int?,
+    json['fireFullBurst'] as bool?,
+    json['giveUpAfterBurst'] as bool?,
+    json['barrelSpinRate'] as int?,
   );
 }
 

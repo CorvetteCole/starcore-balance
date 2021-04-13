@@ -8,16 +8,16 @@ part of 'Targeting.dart';
 
 Targeting _$TargetingFromJson(Map<String, dynamic> json) {
   return Targeting(
-    json['closestFirst'] as bool,
-    json['ignoreDumbProjectiles'] as bool,
-    json['lockedSmartOnly'] as bool,
-    json['minimumDiameter'] as int,
-    json['maximumDiameter'] as int,
-    json['minimumTargetDistance'] as int,
-    json['maximumTargetDistance'] as int,
-    json['topTargets'] as int,
-    json['topBlocks'] as int,
-    json['stopTrackingSpeed'] as int,
+    json['closestFirst'] as bool?,
+    json['ignoreDumbProjectiles'] as bool?,
+    json['lockedSmartOnly'] as bool?,
+    json['minimumDiameter'] as int?,
+    json['maximumDiameter'] as int?,
+    json['minimumTargetDistance'] as int?,
+    json['maximumTargetDistance'] as int?,
+    json['topTargets'] as int?,
+    json['topBlocks'] as int?,
+    json['stopTrackingSpeed'] as int?,
   );
 }
 

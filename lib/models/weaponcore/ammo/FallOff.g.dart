@@ -8,8 +8,8 @@ part of 'FallOff.dart';
 
 FallOff _$FallOffFromJson(Map<String, dynamic> json) {
   return FallOff(
-    (json['distance'] as num).toDouble(),
-    (json['minMultiplier'] as num).toDouble(),
+    (json['distance'] as num?)?.toDouble(),
+    (json['minMultiplier'] as num?)?.toDouble(),
   );
 }
 

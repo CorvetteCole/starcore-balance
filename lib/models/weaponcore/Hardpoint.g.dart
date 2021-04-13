@@ -8,13 +8,13 @@ part of 'Hardpoint.dart';
 
 Hardpoint _$HardpointFromJson(Map<String, dynamic> json) {
   return Hardpoint(
-    json['weaponName'] as String,
-    (json['deviateShotAngle'] as num).toDouble(),
-    (json['aimingTolerance'] as num).toDouble(),
-    _$enumDecode(_$AimLeadingPredictionEnumMap, json['aimLeadingPrediction']),
-    json['delayCeaseFire'] as int,
-    json['addToleranceToTracking'] as bool,
-    json['canShootSubmerged'] as bool,
+    json['weaponName'] as String?,
+    (json['deviateShotAngle'] as num?)?.toDouble(),
+    (json['aimingTolerance'] as num?)?.toDouble(),
+    _$enumDecodeNullable(
+        _$AimLeadingPredictionEnumMap, json['aimLeadingPrediction']),
+    json['delayCeaseFire'] as int?,
+    json['addToleranceToTracking'] as bool?,
     Loading.fromJson(json['loading'] as Map<String, dynamic>),
     Hardware.fromJson(json['hardware'] as Map<String, dynamic>),
   );
@@ -28,7 +28,6 @@ Map<String, dynamic> _$HardpointToJson(Hardpoint instance) => <String, dynamic>{
           _$AimLeadingPredictionEnumMap[instance.aimLeadingPrediction],
       'delayCeaseFire': instance.delayCeaseFire,
       'addToleranceToTracking': instance.addToleranceToTracking,
-      'canShootSubmerged': instance.canShootSubmerged,
       'loading': instance.loading.toJson(),
       'hardware': instance.hardware.toJson(),
     };
@@ -57,6 +56,17 @@ K _$enumDecode<K, V>(
       return MapEntry(unknownValue, enumValues.values.first);
     },
   ).key;
+}
+
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
 }
 
 const _$AimLeadingPredictionEnumMap = {
