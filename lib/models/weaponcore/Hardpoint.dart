@@ -11,7 +11,7 @@ enum AimLeadingPrediction { Off, Basic, Accurate, Advanced }
 @JsonSerializable(explicitToJson: true)
 class Hardpoint {
 
-  late String? weaponName;
+  late String weaponName;
 
   late double? deviateShotAngle;
   late double? aimingTolerance;
@@ -22,8 +22,8 @@ class Hardpoint {
 
   late bool? addToleranceToTracking;
 
-  late Loading loading;
-  late Hardware hardware;
+  late Loading? loading;
+  late Hardware? hardware;
 
   Hardpoint(
       this.weaponName,
@@ -42,7 +42,7 @@ class Hardpoint {
   Hardpoint.fromScript(List<String> definitionList){
     var definition = definitionList.join('\n');
 
-    weaponName = parseString('WeaponName', definition);
+    weaponName = parseString('WeaponName', definition)!;
 
     deviateShotAngle = parseDouble('DeviateShotAngle', definition);
     aimingTolerance = parseDouble('AimingTolerance', definition);
@@ -69,8 +69,8 @@ class Hardpoint {
     var hardwareList = getCodeBlock('new HardwareDef', definitionList);
     var loadingList = getCodeBlock('new LoadingDef', definitionList);
 
-    hardware = Hardware.fromScript(hardwareList);
-    loading = Loading.fromScript(loadingList);
+    hardware = hardwareList != null ? Hardware.fromScript(hardwareList) : null;
+    loading = loadingList != null ? Loading.fromScript(loadingList) : null;
   }
 
 }

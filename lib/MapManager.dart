@@ -6,7 +6,6 @@ import 'models/World.dart';
 import 'Steam.dart';
 import 'ModManager.dart';
 
-
 class MapManager {
   final _log = Logger('MapManager');
   final gameId;
@@ -23,7 +22,6 @@ class MapManager {
       {this.subDirectory = '/steamcmd/',
       this.updateInterval = const Duration(days: 1),
       List<int>? tournamentMaps}) {
-    _modManager = ModManager(gameId, subDirectory);
     if (tournamentMaps != null) {
       for (var mapID in tournamentMaps) {
         _tournamentMaps[mapID] = null;
@@ -36,14 +34,9 @@ class MapManager {
   // shouldn't matter
 
   // return true on a map getting updated, false otherwise.
-  Future<bool> checkForUpdates({bool force = false}) async {
-    if (_needsUpdate() || force) {
-      await _downloadTournamentMaps();
-      await _parseTournamentMaps();
-      await _modManager.updateMods(_tournamentWorlds.values);
-      return true;
-    }
-    return false;
+  Future<void> updateMaps() async {
+    await _downloadTournamentMaps();
+    await _parseTournamentMaps();
   }
 
   bool _needsUpdate() {

@@ -12,9 +12,10 @@ part 'Weapon.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Weapon {
 
-  Set<Ammo> ammo = {};
-  late Hardpoint hardpoint;
-  late Targeting targeting;
+  List<Ammo> ammo = [];
+  late String subTypeId;
+  late Hardpoint? hardpoint;
+  late Targeting? targeting;
 
   @JsonKey(ignore: true)
   List<String> ammoNames = [];
@@ -30,28 +31,34 @@ class Weapon {
     var targetingList = getCodeBlock('new TargetingDef', definition);
     var ammoList = getCodeBlock('Ammos = new', definition); // TODO most easily broken part of the parsing
 
-    hardpoint = Hardpoint.fromScript(hardpointList);
+    hardpoint = hardpointList != null ? Hardpoint.fromScript(hardpointList) : null;
 
-    targeting = Targeting.fromScript(targetingList);
+    targeting = targetingList != null ? Targeting.fromScript(targetingList) : null;
 
+    subTypeId = parseString('SubtypeId', definition.join('\n'))!;
 
     // TODO convert from using list of strings to just raw strings
     // TODO do better regex?
-    var ammoRegEx = RegExp(r'\s*(?<value>[^,\s\[\]{}\n=]+)\s*,*');
-    var matches = ammoRegEx.allMatches(ammoList.join('\n'));
-    for (var t in matches){
-      // I'm bad at regex, couldn't get the above to do what I wanted so we will filter false positives here for now
-      if (t.namedGroup('value') != 'Ammos' && t.namedGroup('value') != 'new'){
-        ammoNames.add(t.namedGroup('value')!);
+    if (ammoList != null) {
+      var ammoRegEx = RegExp(r'\s*(?<value>[^,\s\[\]{}\n=]+)\s*,*');
+      var matches = ammoRegEx.allMatches(ammoList.join('\n'));
+      for (var t in matches) {
+        // I'm bad at regex, couldn't get the above to do what I wanted so we will filter false positives here for now
+        if (t.namedGroup('value') != 'Ammos' &&
+            t.namedGroup('value') != 'new') {
+          ammoNames.add(t.namedGroup('value')!);
+        }
       }
     }
-
-    print('juice');
   }
 
 
   void parseAmmoDefinition(List<String> ammoDefinition){
-    ammo.add(Ammo.fromScript(ammoDefinition));
+    var ammoDef = Ammo.fromScript(ammoDefinition);
+    // handle duplicates
+    if (!ammo.contains(ammoDef)){
+      ammo.add(ammoDef);
+    }
   }
 
 

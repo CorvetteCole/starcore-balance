@@ -30,7 +30,7 @@ String? parseEnumString(String variableName, String source) {
   return regExEnum.firstMatch(source)?.namedGroup('value')?.trim();
 }
 
-List<String> getCodeBlock(String name, Iterable<String> code) {
+List<String>? getCodeBlock(String name, Iterable<String> code) {
   var block = <String>[];
 
   var record = false;
@@ -46,7 +46,6 @@ List<String> getCodeBlock(String name, Iterable<String> code) {
       }
 
       if (bracketCount == 0) {
-        // current values in weaponDefinition should be a weaponDefinition
         return block;
       }
     }
@@ -59,5 +58,5 @@ List<String> getCodeBlock(String name, Iterable<String> code) {
     }
   }
 
-  return block;
+  return null;
 }

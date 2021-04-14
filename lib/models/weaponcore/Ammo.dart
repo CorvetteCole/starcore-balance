@@ -21,7 +21,7 @@ class Ammo {
 
   late bool? hardPointUsable;
 
-  late Damage damage;
+  late Damage? damage;
 
   Ammo(
       this.ammoMagazine,
@@ -57,9 +57,9 @@ class Ammo {
     backKickForce = parseDouble('BackKickForce', definition);
     decayPerShot = parseDouble('DecayPerShot', definition);
     
-    hardPointUsable = parseBool('HardPointsUsable', definition);
-    
+    hardPointUsable = parseBool('HardPointUsable', definition);
+
     var damageList = getCodeBlock('new DamageScaleDef', definitionList);
-    damage = Damage.fromScript(damageList);
+    damage = damageList != null ? Damage.fromScript(damageList) : null;
   }
 }

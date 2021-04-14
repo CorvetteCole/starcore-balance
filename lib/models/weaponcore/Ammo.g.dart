@@ -18,7 +18,9 @@ Ammo _$AmmoFromJson(Map<String, dynamic> json) {
     (json['backKickForce'] as num?)?.toDouble(),
     (json['decayPerShot'] as num?)?.toDouble(),
     json['hardPointUsable'] as bool?,
-    Damage.fromJson(json['damage'] as Map<String, dynamic>),
+    json['damage'] == null
+        ? null
+        : Damage.fromJson(json['damage'] as Map<String, dynamic>),
   );
 }
 
@@ -33,5 +35,5 @@ Map<String, dynamic> _$AmmoToJson(Ammo instance) => <String, dynamic>{
       'backKickForce': instance.backKickForce,
       'decayPerShot': instance.decayPerShot,
       'hardPointUsable': instance.hardPointUsable,
-      'damage': instance.damage.toJson(),
+      'damage': instance.damage?.toJson(),
     };

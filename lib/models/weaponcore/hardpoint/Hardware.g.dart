@@ -16,7 +16,7 @@ Hardware _$HardwareFromJson(Map<String, dynamic> json) {
     json['maxElevation'] as int?,
     json['fixedOffset'] as bool?,
     (json['inventorySize'] as num?)?.toDouble(),
-  )..armor = _$enumDecode(_$ArmorEnumMap, json['armor']);
+  )..armor = _$enumDecodeNullable(_$ArmorEnumMap, json['armor']);
 }
 
 Map<String, dynamic> _$HardwareToJson(Hardware instance) => <String, dynamic>{
@@ -55,6 +55,17 @@ K _$enumDecode<K, V>(
       return MapEntry(unknownValue, enumValues.values.first);
     },
   ).key;
+}
+
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
 }
 
 const _$ArmorEnumMap = {

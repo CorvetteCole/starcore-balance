@@ -50,11 +50,15 @@ class Damage {
     healthHitModifier = parseDouble('HealthHitModifier', definition);
     voxelHitModifier = parseDouble('VoxelHitModifier', definition);
     characters = parseDouble('Characters', definition);
-    
-    fallOff = FallOff.fromScript(getCodeBlock('FallOffDef', definitionList));
-    grids = Grids.fromScript(getCodeBlock('GridSizeDef', definitionList));
-    armor = Armor.fromScript(getCodeBlock('ArmorDef', definitionList));
-    shields = Shields.fromScript(getCodeBlock('ShieldDef', definitionList));
+
+    var fallOffList = getCodeBlock('FallOffDef', definitionList);
+    var gridsList = getCodeBlock('GridSizeDef', definitionList);
+    var armorList = getCodeBlock('ArmorDef', definitionList);
+    var shieldsList = getCodeBlock('ShieldDef', definitionList);
+    fallOff = fallOffList != null ? FallOff.fromScript(fallOffList) : null;
+    grids = gridsList != null ? Grids.fromScript(gridsList) : null;
+    armor = armorList != null ? Armor.fromScript(armorList) : null;
+    shields = shieldsList != null ? Shields.fromScript(shieldsList) : null;
     
   }
 }
